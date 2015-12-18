@@ -10,23 +10,86 @@ var {
   StyleSheet,
   Text,
   View,
+  Navigator,
+  BackAndroid
 } = React;
+
+var MainView = require('./colorgy');
+var EditCoursesView = require('./colorgy/editCourses');
+var AddCoursesView = require('./colorgy/addCourses');
+var CourseView = require('./colorgy/course');
+var LoginView = require('./colorgy/login');
+var ChooseSchoolView = require('./colorgy/chooseSchool');
+var ChooseMajorView = require('./colorgy/chooseMajor');
+var ChooseStartTimeView = require('./colorgy/chooseStartTime');
+
+var _navigator;
+
+BackAndroid.addEventListener('hardwareBackPress', () => {
+  if (_navigator.getCurrentRoutes().length === 1  ) {
+     return false;
+  }
+  _navigator.pop();
+  return true;
+});
+
 
 var ColorgyAppAndroid = React.createClass({
   render: function() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.android.js
-        </Text>
-        <Text style={styles.instructions}>
-          Shake or press menu button for dev menu
-        </Text>
+      <View style={{flex:1}}>
+        <Navigator
+          style={{flex:1}}
+          initialRoute = {{ id: 'Main' }}
+          renderScene={this._renderScene}
+        />
       </View>
     );
+  },
+  _renderScene: function(route, navigator) {
+    _navigator = navigator
+    switch(route.id) {
+      case 'Main':
+        return (
+          <MainView
+            navigator={navigator} />
+        );
+      case 'editCourses':
+        return (
+          <EditCoursesView
+            navigator={navigator} />
+        );
+      case 'addCourses':
+        return (
+          <AddCoursesView
+            navigator={navigator} />
+        );
+      case 'login':
+        return (
+          <LoginView
+            navigator={navigator} />
+        );
+      case 'course':
+        return (
+          <CourseView
+            navigator={navigator} />
+        );
+      case 'chooseSchool':
+        return (
+          <ChooseSchoolView
+            navigator={navigator} />
+        );
+      case 'chooseMajor':
+        return (
+          <ChooseMajorView
+            navigator={navigator} />
+        );
+      case 'chooseStartTime':
+        return (
+          <ChooseStartTimeView
+            navigator={navigator} />
+        );
+    }
   }
 });
 
@@ -36,17 +99,7 @@ var styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+  }
 });
 
 AppRegistry.registerComponent('ColorgyAppAndroid', () => ColorgyAppAndroid);
